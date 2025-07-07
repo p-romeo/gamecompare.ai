@@ -52,9 +52,9 @@ serve(async (req) => {
       }
 
       try {
-        // Import embeddings and GPT modules (dynamic import for Edge Functions)
-        const { generateQueryEmbedding, searchSimilarGames } = await import('../../../src/lib/embeddings.ts')
-        const { streamSimilarGamesResponse } = await import('../../../src/lib/gpt.ts')
+        // Import embeddings and GPT modules (from shared utilities)
+        const { generateQueryEmbedding, searchSimilarGames } = await import('./_shared/embeddings.ts')
+        const { streamSimilarGamesResponse } = await import('./_shared/gpt.ts')
 
         // 1. Generate embedding for query
         const queryEmbedding = await generateQueryEmbedding(query.trim())
@@ -148,8 +148,8 @@ serve(async (req) => {
       }
 
       try {
-        // Import GPT module
-        const { generateGameComparison } = await import('../../../src/lib/gpt.ts')
+        // Import GPT module (from shared utilities)
+        const { generateGameComparison } = await import('./_shared/gpt.ts')
 
         // 1. Find both games in database
         const { data: games, error: gamesError } = await supabase
