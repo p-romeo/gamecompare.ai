@@ -110,7 +110,7 @@ export async function streamSimilarGamesResponse(
   try {
     const prompt = createSimilarGamesPrompt(query, games, filters)
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {
@@ -161,7 +161,7 @@ export async function generateGameComparison(
   try {
     const prompt = createCompareGamesPrompt(leftGame, rightGame)
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {
@@ -198,7 +198,7 @@ export async function generateQueryEmbedding(query: string): Promise<number[]> {
       throw new Error('Query cannot be empty')
     }
 
-    const response = await openai.embeddings.create({
+    const response = await getOpenAIClient().embeddings.create({
       model: 'text-embedding-3-small',
       input: query.trim(),
       encoding_format: 'float',
