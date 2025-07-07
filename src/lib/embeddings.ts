@@ -2,15 +2,34 @@ import OpenAI from 'openai'
 import { Pinecone } from '@pinecone-database/pinecone'
 import { supabase, Game } from './supabase'
 
+/**
+ * Validates that all required environment variables are set
+ * @throws Error if any required environment variables are missing
+ */
+function validateEnvironmentVariables(): void {
+  const required = [
+    'OPENAI_API_KEY',
+    'PINECONE_API_KEY'
+  ]
+
+  const missing = required.filter(key => !process.env[key])
+  
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables: ${missing.join(', ')}`)
+  }
+}
+
+// Validate environment variables at module initialization
+validateEnvironmentVariables()
+
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
+  apiKey: process.env.OPENAI_API_KEY!,
 })
 
-// Initialize Pinecone client
+// Initialize Pinecone client (v1.x no longer uses environment parameter)
 const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || '',
-  environment: process.env.PINECONE_ENV || '',
+  apiKey: process.env.PINECONE_API_KEY!,
 })
 
 const PINECONE_INDEX_NAME = process.env.PINECONE_INDEX_NAME || 'gamecompare-vectors'
@@ -200,23 +219,5 @@ export async function searchSimilarGames(
   } catch (error) {
     console.error('Error searching similar games:', error)
     throw new Error(`Failed to search similar games: ${error instanceof Error ? error.message : 'Unknown error'}`)
-  }
-}
-
-/**
- * Validates that all required environment variables are set
- * @throws Error if any required environment variables are missing
- */
-export function validateEnvironmentVariables(): void {
-  const required = [
-    'OPENAI_API_KEY',
-    'PINECONE_API_KEY', 
-    'PINECONE_ENV'
-  ]
-
-  const missing = required.filter(key => !process.env[key])
-  
-  if (missing.length > 0) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`)
   }
 }
