@@ -1,5 +1,4 @@
 ---
-description:
-globs:
-alwaysApply: false
+alwaysApply: true
+Always refer to the game_compare_ai_treatment.md document for the overall structure, architecture, and implementation guidelines of the GameCompare.ai project. This document serves as the authoritative blueprint and should not be deviated from without explicit user permission. The treatment defines the complete tech stack (Supabase, Next.js, Deno Edge Functions, Pinecone, OpenAI), database schema, API contracts, file structure, and implementation sequence that must be followed.
 ---

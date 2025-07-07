@@ -44,31 +44,179 @@ serve(async (req) => {
       // POST /similar - Find similar games
       const { query, filters } = await req.json() as { query: string; filters?: FilterState }
       
-      // TODO: Implement similar games logic
-      // 1. Generate embedding for query
-      // 2. Query Pinecone for similar vectors
-      // 3. Apply filters
-      // 4. Get game details from database
-      // 5. Generate GPT response with recommendations
-      
-      return new Response(
-        JSON.stringify({ games: [], response: 'Similar games functionality coming soon' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-      )
+      if (!query || query.trim().length === 0) {
+        return new Response(
+          JSON.stringify({ error: 'Query is required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        )
+      }
+
+      try {
+        // Import embeddings and GPT modules (dynamic import for Edge Functions)
+        const { generateQueryEmbedding, searchSimilarGames } = await import('../../../src/lib/embeddings.ts')
+        const { streamSimilarGamesResponse } = await import('../../../src/lib/gpt.ts')
+
+        // 1. Generate embedding for query
+        const queryEmbedding = await generateQueryEmbedding(query.trim())
+
+        // 2. Query Pinecone for similar vectors
+        const similarGameResults = await searchSimilarGames(queryEmbedding, 10)
+
+        if (similarGameResults.length === 0) {
+          return new Response(
+            JSON.stringify({ games: [], response: "I couldn't find any games matching your query. Try a different search term or check back later as we're constantly adding new games!" }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+          )
+        }
+
+        // 3. Get game details from database
+        const gameIds = similarGameResults.map(result => result.gameId)
+        let gamesQuery = supabase
+          .from('games')
+          .select('id, title, price_usd, critic_score, platforms')
+          .in('id', gameIds)
+
+        // 4. Apply filters
+        if (filters?.priceMax !== undefined) {
+          gamesQuery = gamesQuery.lte('price_usd', filters.priceMax)
+        }
+        
+        if (filters?.platforms && filters.platforms.length > 0) {
+          gamesQuery = gamesQuery.overlaps('platforms', filters.platforms)
+        }
+
+        if (filters?.yearRange) {
+          const [startYear, endYear] = filters.yearRange
+          gamesQuery = gamesQuery
+            .gte('release_date', `${startYear}-01-01`)
+            .lte('release_date', `${endYear}-12-31`)
+        }
+
+        const { data: games, error: gamesError } = await gamesQuery
+
+        if (gamesError) {
+          throw new Error(`Database error: ${gamesError.message}`)
+        }
+
+        if (!games || games.length === 0) {
+          return new Response(
+            JSON.stringify({ games: [], response: "No games match your current filters. Try adjusting your price range, platforms, or release year filters." }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+          )
+        }
+
+        // 5. Transform to GameSummary format
+        const gameSummaries = games.map(game => ({
+          id: game.id,
+          title: game.title,
+          price: game.price_usd || 0,
+          score: game.critic_score || 0,
+          platforms: game.platforms || []
+        }))
+
+        // 6. Generate GPT response with streaming
+        const responseStream = await streamSimilarGamesResponse(query, gameSummaries, filters)
+
+        // Return streaming response
+        return new Response(responseStream, {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Transfer-Encoding': 'chunked',
+            'X-Games': JSON.stringify(gameSummaries) // Include games in header for frontend
+          }
+        })
+
+      } catch (error) {
+        console.error('Error in /similar endpoint:', error)
+        return new Response(
+          JSON.stringify({ error: `Failed to find similar games: ${error instanceof Error ? error.message : 'Unknown error'}` }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+        )
+      }
     }
     
     if (path[2] === 'compare' && req.method === 'POST') {
       // POST /compare - Compare two games
       const { left, right } = await req.json() as { left: string; right: string }
       
-      // TODO: Implement game comparison logic
-      // 1. Find both games in database
-      // 2. Generate comparison using GPT
-      
-      return new Response(
-        JSON.stringify({ comparison: 'Comparison functionality coming soon' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-      )
+      if (!left || !right || left.trim().length === 0 || right.trim().length === 0) {
+        return new Response(
+          JSON.stringify({ error: 'Both game IDs are required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        )
+      }
+
+      try {
+        // Import GPT module
+        const { generateGameComparison } = await import('../../../src/lib/gpt.ts')
+
+        // 1. Find both games in database
+        const { data: games, error: gamesError } = await supabase
+          .from('games')
+          .select('id, title, price_usd, critic_score, genres, platforms, short_description')
+          .in('id', [left.trim(), right.trim()])
+
+        if (gamesError) {
+          throw new Error(`Database error: ${gamesError.message}`)
+        }
+
+        if (!games || games.length !== 2) {
+          return new Response(
+            JSON.stringify({ error: 'One or both games not found' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
+          )
+        }
+
+        // Find which game is which
+        const leftGame = games.find(g => g.id === left.trim())
+        const rightGame = games.find(g => g.id === right.trim())
+
+        if (!leftGame || !rightGame) {
+          return new Response(
+            JSON.stringify({ error: 'Could not match games to provided IDs' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
+          )
+        }
+
+        // Transform to GameDetail format (estimate playtime as we don't have it yet)
+        const leftGameDetail = {
+          id: leftGame.id,
+          title: leftGame.title,
+          price: leftGame.price_usd || 0,
+          score: leftGame.critic_score || 0,
+          platforms: leftGame.platforms || [],
+          description: leftGame.short_description || 'No description available',
+          genres: leftGame.genres || [],
+          playtime: 20 // Default estimate - will be improved with actual data
+        }
+
+        const rightGameDetail = {
+          id: rightGame.id,
+          title: rightGame.title,
+          price: rightGame.price_usd || 0,
+          score: rightGame.critic_score || 0,
+          platforms: rightGame.platforms || [],
+          description: rightGame.short_description || 'No description available',
+          genres: rightGame.genres || [],
+          playtime: 20 // Default estimate - will be improved with actual data
+        }
+
+        // 2. Generate comparison using GPT
+        const comparison = await generateGameComparison(leftGameDetail, rightGameDetail)
+
+        return new Response(
+          JSON.stringify({ comparison }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+        )
+
+      } catch (error) {
+        console.error('Error in /compare endpoint:', error)
+        return new Response(
+          JSON.stringify({ error: `Failed to compare games: ${error instanceof Error ? error.message : 'Unknown error'}` }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+        )
+      }
     }
     
     if (path[2] === 'game' && path[3] && req.method === 'GET') {
