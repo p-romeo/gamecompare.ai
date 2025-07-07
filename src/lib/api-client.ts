@@ -1,15 +1,19 @@
 import { GameSummary, GameDetail, FilterState } from './types'
 
+// Type declaration for process.env in Next.js
+declare const process: {
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL?: string
+    NEXT_PUBLIC_SUPABASE_ANON_KEY?: string
+  }
+}
+
 /**
  * Base configuration for API calls
  */
-const API_BASE_URL = (typeof window !== 'undefined' 
-  ? (window as any).process?.env?.NEXT_PUBLIC_SUPABASE_URL 
-  : process?.env?.NEXT_PUBLIC_SUPABASE_URL) + '/functions/v1'
+const API_BASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) + '/functions/v1'
 
-const API_KEY = typeof window !== 'undefined' 
-  ? (window as any).process?.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY 
-  : process?.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const API_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 
 /**
  * Custom error class for API errors
