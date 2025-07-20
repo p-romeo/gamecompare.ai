@@ -10,6 +10,12 @@ export interface GameSummary {
   price: number;
   score: number;
   platforms: string[];
+  storeLinks?: StoreLink[];
+}
+
+export interface StoreLink {
+  store: string;
+  url: string;
 }
 
 export interface GameDetail extends GameSummary {

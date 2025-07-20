@@ -1,0 +1,167 @@
+{
+  "monitoring": {
+    "description": "GameCompare.ai Monitoring and Alerting Configuration",
+    "version": "1.0.0",
+    "last_updated": "2025-01-17"
+  },
+  "alert_thresholds": {
+    "response_time": {
+      "warning_ms": 2000,
+      "critical_ms": 5000,
+      "description": "API response time thresholds"
+    },
+    "error_rate": {
+      "warning_percent": 5.0,
+      "critical_percent": 10.0,
+      "description": "Error rate percentage thresholds"
+    },
+    "database": {
+      "warning_ms": 1000,
+      "critical_ms": 3000,
+      "description": "Database response time thresholds"
+    },
+    "vector_database": {
+      "warning_ms": 2000,
+      "critical_ms": 5000,
+      "description": "Vector database (Pinecone) response time thresholds"
+    },
+    "openai_api": {
+      "warning_ms": 5000,
+      "critical_ms": 10000,
+      "description": "OpenAI API response time thresholds"
+    },
+    "system_resources": {
+      "memory_warning_percent": 85,
+      "memory_critical_percent": 95,
+      "disk_warning_percent": 80,
+      "disk_critical_percent": 90,
+      "description": "System resource usage thresholds"
+    }
+  },
+  "business_metrics": {
+    "search_requests": {
+      "low_volume_threshold": 1,
+      "description": "Minimum expected searches per hour"
+    },
+    "comparison_requests": {
+      "description": "Game comparison requests tracking"
+    },
+    "game_clicks": {
+      "description": "Affiliate link clicks tracking"
+    },
+    "conversation_starts": {
+      "description": "New conversation sessions tracking"
+    },
+    "ai_responses": {
+      "description": "AI-generated responses tracking"
+    }
+  },
+  "monitoring_intervals": {
+    "health_check_minutes": 1,
+    "alert_check_minutes": 5,
+    "metrics_aggregation_minutes": 60,
+    "dashboard_refresh_minutes": 5,
+    "cleanup_retention_days": 30
+  },
+  "endpoints": {
+    "health_check": {
+      "basic": "/functions/v1/health_check/health",
+      "detailed": "/functions/v1/health_check/health/detailed",
+      "readiness": "/functions/v1/health_check/ready",
+      "liveness": "/functions/v1/health_check/live"
+    },
+    "monitoring_dashboard": {
+      "overview": "/functions/v1/monitoring_dashboard/dashboard",
+      "health_status": "/functions/v1/monitoring_dashboard/health-status",
+      "alerts": "/functions/v1/monitoring_dashboard/alerts",
+      "metrics": "/functions/v1/monitoring_dashboard/metrics",
+      "performance": "/functions/v1/monitoring_dashboard/performance",
+      "business": "/functions/v1/monitoring_dashboard/business"
+    },
+    "monitoring_scheduler": {
+      "aggregate_metrics": "/functions/v1/monitoring_scheduler/aggregate-metrics",
+      "check_alerts": "/functions/v1/monitoring_scheduler/check-alerts",
+      "refresh_dashboard": "/functions/v1/monitoring_scheduler/refresh-dashboard",
+      "cleanup_metrics": "/functions/v1/monitoring_scheduler/cleanup-metrics",
+      "run_all": "/functions/v1/monitoring_scheduler/run-all"
+    }
+  },
+  "database_tables": {
+    "system_metrics": "Stores system-level metrics for monitoring",
+    "alert_rules": "Defines alert conditions and thresholds",
+    "alerts": "Tracks fired and resolved alerts",
+    "function_metrics": "Stores performance metrics for Edge Functions",
+    "business_metrics": "Aggregated business metrics for KPI tracking",
+    "system_health_dashboard": "Materialized view for real-time system health"
+  },
+  "alert_rules": [
+    {
+      "name": "High Error Rate",
+      "metric": "error_rate_percent",
+      "condition": ">",
+      "threshold": 5.0,
+      "severity": "critical"
+    },
+    {
+      "name": "High Response Time",
+      "metric": "avg_response_time_ms",
+      "condition": ">",
+      "threshold": 2000,
+      "severity": "warning"
+    },
+    {
+      "name": "Database Connection Issues",
+      "metric": "database_response_time_ms",
+      "condition": ">",
+      "threshold": 1000,
+      "severity": "warning"
+    },
+    {
+      "name": "Vector Database Unavailable",
+      "metric": "vector_db_status",
+      "condition": "=",
+      "threshold": 0,
+      "severity": "critical"
+    },
+    {
+      "name": "OpenAI API Issues",
+      "metric": "openai_response_time_ms",
+      "condition": ">",
+      "threshold": 5000,
+      "severity": "warning"
+    },
+    {
+      "name": "Low Search Volume",
+      "metric": "searches_per_hour",
+      "condition": "<",
+      "threshold": 1,
+      "severity": "info"
+    }
+  ],
+  "setup_instructions": {
+    "1": "Run the monitoring database migration: supabase db push",
+    "2": "Deploy the monitoring Edge Functions: supabase functions deploy",
+    "3": "Set up periodic tasks using pg_cron or external scheduler",
+    "4": "Configure external monitoring tools to call health check endpoints",
+    "5": "Set up alerting integrations (email, Slack, etc.)",
+    "6": "Run validation script: deno run --allow-net --allow-env supabase/functions/validate_monitoring_system.js"
+  },
+  "external_integrations": {
+    "supabase_monitoring": {
+      "description": "Use Supabase built-in monitoring for database metrics",
+      "dashboard_url": "https://supabase.com/dashboard/project/{project_id}/reports"
+    },
+    "uptime_monitoring": {
+      "description": "Configure external uptime monitoring services",
+      "recommended_services": ["UptimeRobot", "Pingdom", "StatusCake"],
+      "endpoints_to_monitor": [
+        "/functions/v1/health_check/health",
+        "/functions/v1/health_check/ready"
+      ]
+    },
+    "log_aggregation": {
+      "description": "Supabase Edge Functions logs are available in the dashboard",
+      "log_retention": "7 days for free tier, longer for paid tiers"
+    }
+  }
+}
