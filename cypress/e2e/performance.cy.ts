@@ -77,28 +77,23 @@ describe('Performance Testing with Lighthouse', () => {
   it('should handle chat interactions with good performance', () => {
     // Mock API with realistic delay
     cy.intercept('POST', '**/api/similar', (req) => {
-      req.reply((res) => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              statusCode: 200,
-              body: {
-                response: 'Here are some performance test games:',
-                games: [
-                  {
-                    id: '1',
-                    title: 'Performance Test Game',
-                    short_description: 'A game for performance testing',
-                    price_usd: 19.99,
-                    platforms: ['PC'],
-                    genres: ['Action']
-                  }
-                ],
-                conversation_id: 'perf-test'
-              }
-            })
-          }, 500) // Realistic API delay
-        })
+      req.reply({
+        statusCode: 200,
+        delay: 500, // Realistic API delay
+        body: {
+          response: 'Here are some performance test games:',
+          games: [
+            {
+              id: '1',
+              title: 'Performance Test Game',
+              short_description: 'A game for performance testing',
+              price_usd: 19.99,
+              platforms: ['PC'],
+              genres: ['Action']
+            }
+          ],
+          conversation_id: 'perf-test'
+        }
       })
     }).as('perfTestApi')
     
@@ -282,19 +277,14 @@ describe('Performance Testing with Lighthouse', () => {
   it('should handle network conditions gracefully', () => {
     // Simulate slow network
     cy.intercept('POST', '**/api/similar', (req) => {
-      req.reply((res) => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              statusCode: 200,
-              body: {
-                response: 'Slow network response',
-                games: [],
-                conversation_id: 'slow-network'
-              }
-            })
-          }, 3000) // 3 second delay
-        })
+      req.reply({
+        statusCode: 200,
+        delay: 3000, // 3 second delay
+        body: {
+          response: 'Slow network response',
+          games: [],
+          conversation_id: 'slow-network'
+        }
       })
     }).as('slowNetwork')
     

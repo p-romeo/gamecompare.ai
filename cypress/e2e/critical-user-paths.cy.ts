@@ -385,7 +385,7 @@ describe('Critical User Paths - 95% Scenario Coverage', () => {
   describe('Path 8: Accessibility User Journey', () => {
     it('should be fully accessible to users with disabilities', () => {
       // Test keyboard navigation
-      cy.get('body').tab()
+      cy.get('body').trigger('keydown', { key: 'Tab' })
       cy.focused().should('have.attr', 'data-cy', 'chat-input')
       
       // Test form submission with keyboard

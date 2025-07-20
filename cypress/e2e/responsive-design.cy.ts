@@ -225,7 +225,7 @@ describe('Responsive Design and Mobile Compatibility', () => {
       
       // Check that text is readable
       cy.get('[data-cy=chat-input]').should('have.css', 'font-size').then((fontSize) => {
-        const size = parseInt(fontSize)
+        const size = parseInt(fontSize as unknown as string)
         expect(size).to.be.at.least(14) // Minimum readable font size
       })
       

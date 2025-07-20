@@ -5,7 +5,6 @@ const nextConfig = {
   
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@supabase/supabase-js', 'openai'],
   },
   
@@ -84,10 +83,18 @@ const nextConfig = {
   
   // API rewrites with caching
   async rewrites() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    
+    // Only add rewrites if Supabase URL is configured
+    if (!supabaseUrl) {
+      console.warn('NEXT_PUBLIC_SUPABASE_URL not configured, skipping API rewrites')
+      return []
+    }
+    
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/api_router/:path*`,
+        destination: `${supabaseUrl}/functions/v1/api_router/:path*`,
       },
     ]
   },

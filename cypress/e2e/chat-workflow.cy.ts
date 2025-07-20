@@ -140,10 +140,10 @@ describe('Chat Workflow - Complete User Journey', () => {
   it('should handle loading states properly', () => {
     // Intercept API calls to add delay
     cy.intercept('POST', '**/api/**', (req) => {
-      req.reply((res) => {
-        return new Promise((resolve) => {
-          setTimeout(() => resolve(res), 2000)
-        })
+      req.reply({
+        statusCode: 200,
+        delay: 2000,
+        body: { response: 'Delayed response', games: [] }
       })
     }).as('slowApi')
     

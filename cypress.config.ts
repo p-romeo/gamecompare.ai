@@ -40,10 +40,14 @@ export default defineConfig({
             pwa: result.lhr.categories.pwa ? result.lhr.categories.pwa.score * 100 : 0
           }
           
-          const failures = []
+          type ScoreCategory = keyof typeof scores
+          
+          const failures: string[] = []
           for (const [category, threshold] of Object.entries(thresholds)) {
-            if (scores[category] < threshold) {
-              failures.push(`${category}: ${scores[category]} < ${threshold}`)
+            const scoreCategory = category as ScoreCategory
+            const thresholdValue = threshold as number
+            if (scoreCategory in scores && scores[scoreCategory] < thresholdValue) {
+              failures.push(`${category}: ${scores[scoreCategory]} < ${thresholdValue}`)
             }
           }
           
@@ -56,8 +60,8 @@ export default defineConfig({
       })
       
       // Lighthouse integration
-      on('before:browser:launch', (browser = {}, launchOptions) => {
-        if (browser.name === 'chrome') {
+      on('before:browser:launch', (browser, launchOptions) => {
+        if (browser && browser.name === 'chrome') {
           launchOptions.args.push('--disable-dev-shm-usage')
           launchOptions.args.push('--disable-gpu')
           launchOptions.args.push('--no-sandbox')

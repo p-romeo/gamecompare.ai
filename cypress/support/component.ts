@@ -19,20 +19,17 @@ import './commands'
 // Import code coverage support
 import '@cypress/code-coverage/support'
 
+// Component testing setup would go here
+// Currently not using component testing, so this is commented out
 // Example use:
 // cy.mount(<MyComponent />)
-import { mount } from 'cypress/react18'
+// import { mount } from 'cypress/react18'
+// Cypress.Commands.add('mount', mount)
 
-Cypress.Commands.add('mount', mount)
-
-// Augment the Cypress namespace to include type definitions for
-// your custom command.
-// Alternatively, can be defined in cypress/support/component.d.ts
-// with a <reference path="./component" /> at the top of your spec.
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      mount: typeof mount
-    }
-  }
-}
+// declare global {
+//   namespace Cypress {
+//     interface Chainable {
+//       mount: typeof mount
+//     }
+//   }
+// }

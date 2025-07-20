@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import Home from '../index'
+import Home from '../../pages/index'
 import { apiClient } from '@/lib/api-client'
 
 // Mock the API client

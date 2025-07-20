@@ -11,7 +11,8 @@ import { FilterState } from './types'
 function validateEnvironmentVariables(): void {
   const required = [
     'OPENAI_API_KEY',
-    'PINECONE_API_KEY'
+    'PINECONE_API_KEY',
+    'PINECONE_ENV'
   ]
 
   const missing = required.filter(key => !process.env[key])
@@ -29,9 +30,10 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 })
 
-// Initialize Pinecone client (v1.x no longer uses environment parameter)
+// Initialize Pinecone client
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY!,
+  environment: process.env.PINECONE_ENV || 'us-east-1-aws',
 })
 
 const PINECONE_INDEX_NAME = process.env.PINECONE_INDEX_NAME || 'gamecompare-vectors'
