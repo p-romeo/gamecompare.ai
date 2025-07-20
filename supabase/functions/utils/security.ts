@@ -1,6 +1,7 @@
 /**
  * Advanced security utilities for GameCompare.ai
  * Includes input validation, rate limiting, DDoS protection, and security audit logging
+ * Enhanced with production-grade security measures, API key rotation, and compliance monitoring
  */
 
 interface SecurityConfig {

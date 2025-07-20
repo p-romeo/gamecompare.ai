@@ -103,7 +103,7 @@ function logResponse(
 }
 
 /**
- * Creates a structured error response
+ * Creates a structured error response with security headers
  */
 function createErrorResponse(
   error: string,
@@ -125,8 +125,34 @@ function createErrorResponse(
   return new Response(
     JSON.stringify(errorResponse),
     { 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+      headers: { 
+        ...corsHeaders, 
+        'Content-Type': 'application/json',
+        ...securityManager.getSecurityHeaders()
+      }, 
       status 
+    }
+  )
+}
+
+/**
+ * Creates a secure response with consistent security headers
+ */
+function createSecureResponse(
+  data: any,
+  status: number = 200,
+  additionalHeaders: HeadersInit = {}
+): Response {
+  return new Response(
+    JSON.stringify(data),
+    {
+      status,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+        ...securityManager.getSecurityHeaders(),
+        ...additionalHeaders
+      }
     }
   )
 }
@@ -312,12 +338,16 @@ serve(async (req) => {
             'X-Cache': 'HIT'
           })
           
-          const response = new Response(
-            JSON.stringify({
+          const response = createSecureResponse(
+            {
               ...cachedResult,
               conversation_id: conversation_id || crypto.randomUUID()
-            }),
-            { headers: responseHeaders, status: 200 }
+            },
+            200,
+            { 
+              ...SessionManager.createSessionHeaders(sessionId, {}),
+              'X-Cache': 'HIT'
+            }
           )
           
           // Record cache hit metric
@@ -398,14 +428,14 @@ serve(async (req) => {
             logError(`Failed to save assistant message: ${conversationError}`, requestId)
           }
 
-          const responseHeaders = SessionManager.createSessionHeaders(sessionId, { ...corsHeaders, 'Content-Type': 'application/json' })
-          const response = new Response(
-            JSON.stringify({ 
+          const response = createSecureResponse(
+            { 
               games: [], 
               response: noResultsResponse,
               conversation_id: conversation.id
-            }),
-            { headers: responseHeaders, status: 200 }
+            },
+            200,
+            SessionManager.createSessionHeaders(sessionId, {})
           )
           logResponse(requestId, 200, Date.now() - startTime, path)
           return response
@@ -480,14 +510,13 @@ serve(async (req) => {
         // Record performance metrics
         performanceMonitor.recordQueryTime('similar_games_full', Date.now() - startTime)
         
-        const responseHeaders = SessionManager.createSessionHeaders(sessionId, { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json',
-          'X-Cache': 'MISS'
-        })
-        const response = new Response(
-          JSON.stringify(responseData),
-          { headers: responseHeaders, status: 200 }
+        const response = createSecureResponse(
+          responseData,
+          200,
+          {
+            ...SessionManager.createSessionHeaders(sessionId, {}),
+            'X-Cache': 'MISS'
+          }
         )
         logResponse(requestId, 200, Date.now() - startTime, path)
         return response
@@ -544,16 +573,10 @@ serve(async (req) => {
         const cachedComparison = await cacheManager.get(cacheKey)
         
         if (cachedComparison) {
-          const response = new Response(
-            JSON.stringify(cachedComparison),
-            { 
-              headers: { 
-                ...corsHeaders, 
-                'Content-Type': 'application/json',
-                'X-Cache': 'HIT'
-              }, 
-              status: 200 
-            }
+          const response = createSecureResponse(
+            cachedComparison,
+            200,
+            { 'X-Cache': 'HIT' }
           )
           
           // Record cache hit metric
@@ -654,16 +677,10 @@ serve(async (req) => {
         // Record performance metrics
         performanceMonitor.recordQueryTime('game_comparison_full', Date.now() - startTime)
         
-        const response = new Response(
-          JSON.stringify(responseData),
-          { 
-            headers: { 
-              ...corsHeaders, 
-              'Content-Type': 'application/json',
-              'X-Cache': 'MISS'
-            }, 
-            status: 200 
-          }
+        const response = createSecureResponse(
+          responseData,
+          200,
+          { 'X-Cache': 'MISS' }
         )
         logResponse(requestId, 200, Date.now() - startTime, path)
         return response
@@ -713,16 +730,10 @@ serve(async (req) => {
         const cachedGame = await cacheManager.get(cacheKey)
         
         if (cachedGame) {
-          const response = new Response(
-            JSON.stringify(cachedGame),
-            { 
-              headers: { 
-                ...corsHeaders, 
-                'Content-Type': 'application/json',
-                'X-Cache': 'HIT'
-              }, 
-              status: 200 
-            }
+          const response = createSecureResponse(
+            cachedGame,
+            200,
+            { 'X-Cache': 'HIT' }
           )
           
           // Record cache hit metric
@@ -766,16 +777,10 @@ serve(async (req) => {
         // Record performance metrics
         performanceMonitor.recordQueryTime('game_details_full', Date.now() - startTime)
         
-        const response = new Response(
-          JSON.stringify(game),
-          { 
-            headers: { 
-              ...corsHeaders, 
-              'Content-Type': 'application/json',
-              'X-Cache': 'MISS'
-            }, 
-            status: 200 
-          }
+        const response = createSecureResponse(
+          game,
+          200,
+          { 'X-Cache': 'MISS' }
         )
         logResponse(requestId, 200, Date.now() - startTime, path)
         return response
@@ -853,10 +858,7 @@ serve(async (req) => {
           result = { summaries }
         }
         
-        const response = new Response(
-          JSON.stringify(result),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-        )
+        const response = createSecureResponse(result, 200)
         logResponse(requestId, 200, Date.now() - startTime, path)
         return response
       } catch (error) {
@@ -947,10 +949,14 @@ serve(async (req) => {
         const affiliateId = Deno.env.get(`AFFILIATE_${store.toUpperCase()}`)
         const redirectUrl = affiliateId ? `${link.url}?aff_id=${affiliateId}` : link.url
         
-        // Redirect
+        // Redirect with security headers
         const response = new Response(null, {
           status: 302,
-          headers: { ...corsHeaders, 'Location': redirectUrl }
+          headers: { 
+            ...corsHeaders, 
+            'Location': redirectUrl,
+            ...securityManager.getSecurityHeaders()
+          }
         })
         logResponse(requestId, 302, Date.now() - startTime, path)
         return response
