@@ -110,7 +110,7 @@ export default function Home() {
                   <div className="text-3xl mb-4">💬</div>
                   <h3 className="text-lg font-semibold mb-2">Chat with AI</h3>
                   <p className="text-gray-400 text-sm">
-                    Tell our AI what kind of games you're looking for using natural language
+                    Tell our AI what kind of games you&apos;re looking for using natural language
                   </p>
                 </div>
                 <div className="text-center p-6 bg-gray-800/50 rounded-lg">

@@ -60,7 +60,7 @@ export function GameCard({ game, onCompare }: GameCardProps) {
       
       <div className="flex justify-between items-center mb-3">
         <span className={`font-medium ${game.price === 0 ? 'text-green-400' : 'text-green-400'}`} data-cy="price">
-          ${formatPrice(game.price)}
+          {formatPrice(game.price)}
         </span>
         <span className="text-yellow-400 flex items-center">
           ⭐ {formatScore(game.score)}
@@ -95,7 +95,7 @@ export function GameCard({ game, onCompare }: GameCardProps) {
                 data-cy={`store-link-${storeLink.store.toLowerCase()}`}
               >
                 <span>{STORE_ICONS[storeLink.store.toLowerCase()] || '🛒'}</span>
-                <span className="capitalize">{storeLink.store}</span>
+                <span className="capitalize">{storeLink.store.toLowerCase()}</span>
               </button>
             ))}
           </div>

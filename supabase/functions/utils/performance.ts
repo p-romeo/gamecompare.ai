@@ -3,7 +3,7 @@
  * Includes query optimization, connection pooling, and response optimization
  */
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 /**
  * Connection pool for database connections
@@ -235,8 +235,8 @@ export class OptimizedQueryBuilder {
   /**
    * Batch insert/update with conflict resolution
    */
-  async upsertGamesBatch(games: any[], batchSize: number = 100): Promise<void> {
-    const batches = []
+  async upsertGamesBatch(games: Record<string, any>[], batchSize: number = 100): Promise<void> {
+    const batches: Record<string, any>[][] = []
     for (let i = 0; i < games.length; i += batchSize) {
       batches.push(games.slice(i, i + batchSize))
     }

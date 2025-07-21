@@ -67,9 +67,9 @@ describe('GameCard', () => {
     render(<GameCard game={mockGame} />)
     
     expect(screen.getByText('Available on:')).toBeInTheDocument()
-    expect(screen.getByText('Steam')).toBeInTheDocument()
-    expect(screen.getByText('Epic')).toBeInTheDocument()
-    expect(screen.getByText('Gog')).toBeInTheDocument()
+    expect(screen.getByText('steam')).toBeInTheDocument()
+    expect(screen.getByText('epic')).toBeInTheDocument()
+    expect(screen.getByText('gog')).toBeInTheDocument()
   })
 
   it('does not render store links section when no links available', () => {
@@ -91,7 +91,7 @@ describe('GameCard', () => {
     
     render(<GameCard game={mockGame} />)
     
-    const steamButton = screen.getByText('Steam')
+    const steamButton = screen.getByText('steam')
     fireEvent.click(steamButton)
     
     await waitFor(() => {
@@ -111,7 +111,7 @@ describe('GameCard', () => {
     
     render(<GameCard game={mockGame} />)
     
-    const epicButton = screen.getByText('Epic')
+    const epicButton = screen.getByText('epic')
     fireEvent.click(epicButton)
     
     await waitFor(() => {
@@ -131,9 +131,9 @@ describe('GameCard', () => {
   it('applies correct store colors and icons', () => {
     render(<GameCard game={mockGame} />)
     
-    const steamButton = screen.getByText('Steam').closest('button')
-    const epicButton = screen.getByText('Epic').closest('button')
-    const gogButton = screen.getByText('Gog').closest('button')
+    const steamButton = screen.getByText('steam').closest('button')
+    const epicButton = screen.getByText('epic').closest('button')
+    const gogButton = screen.getByText('gog').closest('button')
     
     expect(steamButton).toHaveClass('bg-blue-600', 'hover:bg-blue-700')
     expect(epicButton).toHaveClass('bg-gray-600', 'hover:bg-gray-700')
@@ -148,7 +148,7 @@ describe('GameCard', () => {
     
     render(<GameCard game={gameWithUnknownStore} />)
     
-    const unknownButton = screen.getByText('Unknown').closest('button')
+    const unknownButton = screen.getByText('unknown').closest('button')
     expect(unknownButton).toHaveClass('bg-gray-600', 'hover:bg-gray-700')
   })
 
@@ -182,7 +182,7 @@ describe('GameCard', () => {
     
     render(<GameCard game={gameWithMixedCaseStore} />)
     
-    expect(screen.getByText('Playstation')).toBeInTheDocument()
+    expect(screen.getByText('playstation')).toBeInTheDocument()
   })
 
   it('shows correct tooltip for store buttons', () => {
@@ -202,7 +202,7 @@ describe('GameCard', () => {
     
     render(<GameCard game={mockGame} />)
     
-    const steamButton = screen.getByText('Steam')
+    const steamButton = screen.getByText('steam')
     
     fireEvent.click(steamButton)
     fireEvent.click(steamButton)

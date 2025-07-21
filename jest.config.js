@@ -19,6 +19,12 @@ const customJestConfig = {
     '!src/pages/_app.tsx',
     '!src/pages/_document.tsx',
   ],
+  // Memory optimization settings
+  maxWorkers: 2,
+  workerIdleMemoryLimit: '512MB',
+  // Reduce memory usage by clearing cache between tests
+  clearMocks: true,
+  restoreMocks: true,
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

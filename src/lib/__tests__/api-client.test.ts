@@ -88,7 +88,10 @@ describe('APIClient', () => {
     })
 
     it('should handle API errors', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Server error' }), { status: 500 })
+      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Server error' }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      })
 
       await expect(
         apiClient.searchSimilarGames('action games')
@@ -201,7 +204,10 @@ describe('APIClient', () => {
     })
 
     it('should handle comparison API errors', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Game not found' }), { status: 404 })
+      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Game not found' }), { 
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      })
 
       await expect(
         apiClient.compareGames('game-1', 'invalid-game')
@@ -251,7 +257,10 @@ describe('APIClient', () => {
     })
 
     it('should handle game not found error', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Game not found' }), { status: 404 })
+      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Game not found' }), { 
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      })
 
       await expect(
         apiClient.getGameDetails('invalid-game')
@@ -274,7 +283,10 @@ describe('APIClient', () => {
     })
 
     it('should handle tracking errors', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Invalid parameters' }), { status: 400 })
+      fetchMock.mockResponseOnce(JSON.stringify({ error: 'Invalid parameters' }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      })
 
       await expect(
         apiClient.trackClick('invalid-game', 'invalid-store')

@@ -42,7 +42,7 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
         console.error('Failed to parse saved filters:', error)
       }
     }
-  }, [])
+  }, [initialFilters])
 
   // Save messages to localStorage whenever messages change
   useEffect(() => {
