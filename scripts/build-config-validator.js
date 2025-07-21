@@ -139,11 +139,15 @@ function validateVercelConfig() {
       logWarning('Framework not specified - relying on auto-detection');
     }
     
-    // Check Node.js version
-    if (vercelConfig.functions && vercelConfig.functions['**']) {
-      const runtime = vercelConfig.functions['**'].runtime;
-      if (runtime) {
-        logSuccess(`Runtime specified: ${runtime}`);
+    // Check Node.js runtime version in functions
+    if (vercelConfig.functions) {
+      const functionConfigs = Object.values(vercelConfig.functions);
+      const runtimes = functionConfigs
+        .filter(config => config && config.runtime)
+        .map(config => config.runtime);
+      
+      if (runtimes.length > 0) {
+        logSuccess(`Runtime(s) specified: ${runtimes.join(', ')}`);
       }
     }
     

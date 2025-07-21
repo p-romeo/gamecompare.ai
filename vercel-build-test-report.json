@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-07-21T18:00:55.334Z",
-  "duration": 187017,
-  "durationFormatted": "3.1m",
+  "timestamp": "2025-07-21T18:36:47.357Z",
+  "duration": 166960,
+  "durationFormatted": "2.8m",
   "summary": {
     "total": 29,
     "passed": 29,
@@ -13,175 +13,175 @@
       "name": "Node.js version compatibility",
       "passed": true,
       "details": "v24.3.0 matches requirement >=18.0.0 <25.0.0",
-      "timestamp": "2025-07-21T17:57:48.321Z"
+      "timestamp": "2025-07-21T18:34:00.401Z"
     },
     {
       "name": "npm version compatibility",
       "passed": true,
       "details": "11.4.2 available (requirement: >=9.0.0)",
-      "timestamp": "2025-07-21T17:57:48.534Z"
+      "timestamp": "2025-07-21T18:34:00.612Z"
     },
     {
       "name": "Vercel configuration exists",
       "passed": true,
       "details": "Framework: nextjs",
-      "timestamp": "2025-07-21T17:57:48.543Z"
+      "timestamp": "2025-07-21T18:34:00.612Z"
     },
     {
       "name": "Custom build command configured",
       "passed": true,
       "details": "npm run build:vercel",
-      "timestamp": "2025-07-21T17:57:48.544Z"
+      "timestamp": "2025-07-21T18:34:00.613Z"
     },
     {
       "name": "package-lock.json exists",
       "passed": true,
       "details": "Deterministic builds enabled",
-      "timestamp": "2025-07-21T17:57:48.548Z"
+      "timestamp": "2025-07-21T18:34:00.615Z"
     },
     {
       "name": "npm ci installation",
       "passed": true,
       "details": "Dependencies installed successfully",
-      "timestamp": "2025-07-21T17:58:30.755Z"
+      "timestamp": "2025-07-21T18:34:45.438Z"
     },
     {
       "name": "Critical dependency: typescript",
       "passed": true,
       "details": "Available",
-      "timestamp": "2025-07-21T17:58:30.756Z"
+      "timestamp": "2025-07-21T18:34:45.439Z"
     },
     {
       "name": "Critical dependency: eslint",
       "passed": true,
       "details": "Available",
-      "timestamp": "2025-07-21T17:58:30.757Z"
+      "timestamp": "2025-07-21T18:34:45.440Z"
     },
     {
       "name": "Critical dependency: @types/react",
       "passed": true,
       "details": "Available",
-      "timestamp": "2025-07-21T17:58:30.757Z"
+      "timestamp": "2025-07-21T18:34:45.440Z"
     },
     {
       "name": "Critical dependency: @types/react-dom",
       "passed": true,
       "details": "Available",
-      "timestamp": "2025-07-21T17:58:30.758Z"
+      "timestamp": "2025-07-21T18:34:45.441Z"
     },
     {
       "name": "Critical dependency: next",
       "passed": true,
       "details": "Available",
-      "timestamp": "2025-07-21T17:58:30.759Z"
+      "timestamp": "2025-07-21T18:34:45.441Z"
     },
     {
       "name": "Pre-build validation",
       "passed": true,
       "details": "All validations passed",
-      "timestamp": "2025-07-21T17:59:00.692Z"
+      "timestamp": "2025-07-21T18:34:48.751Z"
     },
     {
       "name": "Build configuration validation",
       "passed": true,
       "details": "Configuration is valid",
-      "timestamp": "2025-07-21T17:59:03.792Z"
+      "timestamp": "2025-07-21T18:34:50.881Z"
     },
     {
       "name": "Next.js build",
       "passed": true,
       "details": "Build completed successfully",
-      "timestamp": "2025-07-21T18:00:55.185Z"
+      "timestamp": "2025-07-21T18:36:47.208Z"
     },
     {
       "name": "Build output directory",
       "passed": true,
       "details": ".next directory created",
-      "timestamp": "2025-07-21T18:00:55.186Z"
+      "timestamp": "2025-07-21T18:36:47.209Z"
     },
     {
       "name": "Build artifact: .next/static",
       "passed": true,
       "details": "Present",
-      "timestamp": "2025-07-21T18:00:55.186Z"
+      "timestamp": "2025-07-21T18:36:47.209Z"
     },
     {
       "name": "Build artifact: .next/server",
       "passed": true,
       "details": "Present",
-      "timestamp": "2025-07-21T18:00:55.186Z"
+      "timestamp": "2025-07-21T18:36:47.210Z"
     },
     {
       "name": "Build artifact: .next/BUILD_ID",
       "passed": true,
       "details": "Present",
-      "timestamp": "2025-07-21T18:00:55.187Z"
+      "timestamp": "2025-07-21T18:36:47.210Z"
     },
     {
       "name": "Post-build validation",
       "passed": true,
       "details": "All validations passed",
-      "timestamp": "2025-07-21T18:00:55.329Z"
+      "timestamp": "2025-07-21T18:36:47.351Z"
     },
     {
       "name": "Build script exists",
       "passed": true,
       "details": "npm run install:deps && npm run pre-build && next build && npm run validate:post-build",
-      "timestamp": "2025-07-21T18:00:55.329Z"
+      "timestamp": "2025-07-21T18:36:47.351Z"
     },
     {
       "name": "Start script exists",
       "passed": true,
       "details": "next start",
-      "timestamp": "2025-07-21T18:00:55.330Z"
+      "timestamp": "2025-07-21T18:36:47.352Z"
     },
     {
       "name": "Production dependency: next",
       "passed": true,
       "details": "Version: ^14.2.30",
-      "timestamp": "2025-07-21T18:00:55.330Z"
+      "timestamp": "2025-07-21T18:36:47.352Z"
     },
     {
       "name": "Production dependency: react",
       "passed": true,
       "details": "Version: ^18.2.0",
-      "timestamp": "2025-07-21T18:00:55.330Z"
+      "timestamp": "2025-07-21T18:36:47.352Z"
     },
     {
       "name": "Production dependency: react-dom",
       "passed": true,
       "details": "Version: ^18.2.0",
-      "timestamp": "2025-07-21T18:00:55.330Z"
+      "timestamp": "2025-07-21T18:36:47.352Z"
     },
     {
       "name": "Environment configuration",
       "passed": true,
       "details": "Example files available",
-      "timestamp": "2025-07-21T18:00:55.331Z"
+      "timestamp": "2025-07-21T18:36:47.353Z"
     },
     {
       "name": "Next.js configuration exists",
       "passed": true,
       "details": "Custom configuration available",
-      "timestamp": "2025-07-21T18:00:55.331Z"
+      "timestamp": "2025-07-21T18:36:47.353Z"
     },
     {
       "name": "Compression enabled",
       "passed": true,
       "details": "Gzip compression active",
-      "timestamp": "2025-07-21T18:00:55.333Z"
+      "timestamp": "2025-07-21T18:36:47.355Z"
     },
     {
       "name": "Security headers optimized",
       "passed": true,
       "details": "X-Powered-By header disabled",
-      "timestamp": "2025-07-21T18:00:55.333Z"
+      "timestamp": "2025-07-21T18:36:47.355Z"
     },
     {
       "name": "Bundle size optimization",
       "passed": true,
       "details": "Total JS: 0.37MB",
-      "timestamp": "2025-07-21T18:00:55.334Z"
+      "timestamp": "2025-07-21T18:36:47.357Z"
     }
   ],
   "environment": {

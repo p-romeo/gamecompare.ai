@@ -3,7 +3,6 @@
   "buildCommand": "npm run build:vercel",
   "devCommand": "npm run dev",
   "installCommand": "npm ci",
-  "nodeVersion": "18.x",
   "env": {
     "NODE_ENV": "production",
     "NEXT_TELEMETRY_DISABLED": "1"
@@ -16,7 +15,8 @@
   },
   "functions": {
     "app/api/**/*.ts": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "runtime": "nodejs18.x"
     }
   },
   "headers": [
