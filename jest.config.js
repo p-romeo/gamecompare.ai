@@ -15,9 +15,17 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
+    'scripts/**/*.js',
     '!src/**/*.d.ts',
     '!src/pages/_app.tsx',
     '!src/pages/_document.tsx',
+    '!scripts/__tests__/**',
+  ],
+  testMatch: [
+    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/src/**/*.{test,spec}.{js,jsx,ts,tsx}',
+    '<rootDir>/scripts/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/scripts/**/*.{test,spec}.{js,jsx,ts,tsx}',
   ],
   // Memory optimization settings
   maxWorkers: 2,

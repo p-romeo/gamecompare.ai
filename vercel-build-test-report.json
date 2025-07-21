@@ -1,0 +1,192 @@
+{
+  "timestamp": "2025-07-21T18:00:55.334Z",
+  "duration": 187017,
+  "durationFormatted": "3.1m",
+  "summary": {
+    "total": 29,
+    "passed": 29,
+    "failed": 0,
+    "successRate": "100.0"
+  },
+  "tests": [
+    {
+      "name": "Node.js version compatibility",
+      "passed": true,
+      "details": "v24.3.0 matches requirement >=18.0.0 <25.0.0",
+      "timestamp": "2025-07-21T17:57:48.321Z"
+    },
+    {
+      "name": "npm version compatibility",
+      "passed": true,
+      "details": "11.4.2 available (requirement: >=9.0.0)",
+      "timestamp": "2025-07-21T17:57:48.534Z"
+    },
+    {
+      "name": "Vercel configuration exists",
+      "passed": true,
+      "details": "Framework: nextjs",
+      "timestamp": "2025-07-21T17:57:48.543Z"
+    },
+    {
+      "name": "Custom build command configured",
+      "passed": true,
+      "details": "npm run build:vercel",
+      "timestamp": "2025-07-21T17:57:48.544Z"
+    },
+    {
+      "name": "package-lock.json exists",
+      "passed": true,
+      "details": "Deterministic builds enabled",
+      "timestamp": "2025-07-21T17:57:48.548Z"
+    },
+    {
+      "name": "npm ci installation",
+      "passed": true,
+      "details": "Dependencies installed successfully",
+      "timestamp": "2025-07-21T17:58:30.755Z"
+    },
+    {
+      "name": "Critical dependency: typescript",
+      "passed": true,
+      "details": "Available",
+      "timestamp": "2025-07-21T17:58:30.756Z"
+    },
+    {
+      "name": "Critical dependency: eslint",
+      "passed": true,
+      "details": "Available",
+      "timestamp": "2025-07-21T17:58:30.757Z"
+    },
+    {
+      "name": "Critical dependency: @types/react",
+      "passed": true,
+      "details": "Available",
+      "timestamp": "2025-07-21T17:58:30.757Z"
+    },
+    {
+      "name": "Critical dependency: @types/react-dom",
+      "passed": true,
+      "details": "Available",
+      "timestamp": "2025-07-21T17:58:30.758Z"
+    },
+    {
+      "name": "Critical dependency: next",
+      "passed": true,
+      "details": "Available",
+      "timestamp": "2025-07-21T17:58:30.759Z"
+    },
+    {
+      "name": "Pre-build validation",
+      "passed": true,
+      "details": "All validations passed",
+      "timestamp": "2025-07-21T17:59:00.692Z"
+    },
+    {
+      "name": "Build configuration validation",
+      "passed": true,
+      "details": "Configuration is valid",
+      "timestamp": "2025-07-21T17:59:03.792Z"
+    },
+    {
+      "name": "Next.js build",
+      "passed": true,
+      "details": "Build completed successfully",
+      "timestamp": "2025-07-21T18:00:55.185Z"
+    },
+    {
+      "name": "Build output directory",
+      "passed": true,
+      "details": ".next directory created",
+      "timestamp": "2025-07-21T18:00:55.186Z"
+    },
+    {
+      "name": "Build artifact: .next/static",
+      "passed": true,
+      "details": "Present",
+      "timestamp": "2025-07-21T18:00:55.186Z"
+    },
+    {
+      "name": "Build artifact: .next/server",
+      "passed": true,
+      "details": "Present",
+      "timestamp": "2025-07-21T18:00:55.186Z"
+    },
+    {
+      "name": "Build artifact: .next/BUILD_ID",
+      "passed": true,
+      "details": "Present",
+      "timestamp": "2025-07-21T18:00:55.187Z"
+    },
+    {
+      "name": "Post-build validation",
+      "passed": true,
+      "details": "All validations passed",
+      "timestamp": "2025-07-21T18:00:55.329Z"
+    },
+    {
+      "name": "Build script exists",
+      "passed": true,
+      "details": "npm run install:deps && npm run pre-build && next build && npm run validate:post-build",
+      "timestamp": "2025-07-21T18:00:55.329Z"
+    },
+    {
+      "name": "Start script exists",
+      "passed": true,
+      "details": "next start",
+      "timestamp": "2025-07-21T18:00:55.330Z"
+    },
+    {
+      "name": "Production dependency: next",
+      "passed": true,
+      "details": "Version: ^14.2.30",
+      "timestamp": "2025-07-21T18:00:55.330Z"
+    },
+    {
+      "name": "Production dependency: react",
+      "passed": true,
+      "details": "Version: ^18.2.0",
+      "timestamp": "2025-07-21T18:00:55.330Z"
+    },
+    {
+      "name": "Production dependency: react-dom",
+      "passed": true,
+      "details": "Version: ^18.2.0",
+      "timestamp": "2025-07-21T18:00:55.330Z"
+    },
+    {
+      "name": "Environment configuration",
+      "passed": true,
+      "details": "Example files available",
+      "timestamp": "2025-07-21T18:00:55.331Z"
+    },
+    {
+      "name": "Next.js configuration exists",
+      "passed": true,
+      "details": "Custom configuration available",
+      "timestamp": "2025-07-21T18:00:55.331Z"
+    },
+    {
+      "name": "Compression enabled",
+      "passed": true,
+      "details": "Gzip compression active",
+      "timestamp": "2025-07-21T18:00:55.333Z"
+    },
+    {
+      "name": "Security headers optimized",
+      "passed": true,
+      "details": "X-Powered-By header disabled",
+      "timestamp": "2025-07-21T18:00:55.333Z"
+    },
+    {
+      "name": "Bundle size optimization",
+      "passed": true,
+      "details": "Total JS: 0.37MB",
+      "timestamp": "2025-07-21T18:00:55.334Z"
+    }
+  ],
+  "environment": {
+    "nodeVersion": "v24.3.0",
+    "platform": "win32",
+    "arch": "x64"
+  }
+}
