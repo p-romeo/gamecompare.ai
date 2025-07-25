@@ -38,3 +38,32 @@ next-env.d.ts
 # supabase
 supabase/.branches
 supabase/.temp
+
+# build artifacts and reports (from consolidated scripts)
+build-*.json
+build-*.log
+*-report.json
+*-error.json
+validation-report.json
+test-report.json
+deployment-report.json
+
+# temporary files
+*.tmp
+*.temp
+.cache/
+
+# IDE and editor files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

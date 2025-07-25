@@ -1,0 +1,71 @@
+
+=== Unified Build Started at 2025-07-25T01:33:14.959Z ===
+[2025-07-25T01:33:14.960Z] [1m[34mStarting Unified Build (development)...[0m
+[2025-07-25T01:33:14.964Z] Node.js: v24.3.0
+[2025-07-25T01:33:14.964Z] Platform: win32 x64
+[2025-07-25T01:33:14.964Z] Working Directory: C:\Kiro Repo\gamecompare Kiro\gamecompare.ai
+[2025-07-25T01:33:14.965Z] [1m[34mStarting Phase: Pre-Build Validation[0m
+[2025-07-25T01:33:14.965Z] Description: Validating configuration and dependencies
+[2025-07-25T01:33:14.966Z] Validating package.json...
+[2025-07-25T01:33:14.966Z] Node.js version specified: >=18.0.0 <25.0.0
+[2025-07-25T01:33:14.967Z] Validating TypeScript configuration...
+[2025-07-25T01:33:14.967Z] TypeScript configuration is valid
+[2025-07-25T01:33:14.967Z] Validating Next.js configuration...
+[2025-07-25T01:33:14.968Z] Next.js configuration is valid
+[2025-07-25T01:33:14.969Z] Checking dependencies...
+[2025-07-25T01:33:14.969Z] Dependencies are installed
+[2025-07-25T01:33:14.970Z] [1m[32mPhase COMPLETED: Pre-Build Validation (5ms)[0m
+[2025-07-25T01:33:14.970Z] [1m[34mStarting Phase: Build Process[0m
+[2025-07-25T01:33:14.971Z] Description: Running development build
+[2025-07-25T01:33:14.971Z] Cleaning previous build...
+[2025-07-25T01:33:14.973Z] Executing: next build
+[2025-07-25T01:34:12.866Z] Command completed in 57.9s
+[2025-07-25T01:34:12.867Z] Command output:
+[2025-07-25T01:34:12.867Z] ▲ Next.js 14.2.30
+  - Environments: .env.local
+
+   Linting and checking validity of types ...
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Collecting page data ...
+   Generating static pages (0/3) ...
+ ✓ Generating static pages (3/3)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (pages)                           Size     First Load JS
+┌ ○ /                                   5.86 kB        89.9 kB
+├   /_app                               0 B            84.1 kB
+├ ○ /404                                180 B          84.2 kB
+├ ƒ /api/chat                           0 B            84.1 kB
+├ ƒ /api/click/[...params]              0 B            84.1 kB
+├ ƒ /api/game/[id]                      0 B            84.1 kB
+├ ƒ /api/similar                        0 B            84.1 kB
+└ ƒ /api/similar/stream                 0 B            84.1 kB
++ First Load JS shared by all           88.9 kB
+  └ chunks/vendors-ff03d8e361dd1f5b.js  82.9 kB
+  └ other shared chunks (total)         6.01 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+[2025-07-25T01:34:12.868Z] [1m[32mPhase COMPLETED: Build Process (57.9s)[0m
+[2025-07-25T01:34:12.869Z] [1m[34mStarting Phase: Post-Build Validation[0m
+[2025-07-25T01:34:12.870Z] Description: Validating build output and assets
+[2025-07-25T01:34:12.870Z] Validating build directory structure...
+[2025-07-25T01:34:12.872Z] Build ID: JAjdtDn9ws7MSKvSQX800
+[2025-07-25T01:34:12.872Z] Analyzing bundle sizes...
+[2025-07-25T01:34:12.874Z] Total JavaScript files: 7
+[2025-07-25T01:34:12.875Z] Largest JavaScript bundles:
+[2025-07-25T01:34:12.875Z]   - vendors-ff03d8e361dd1f5b.js: 264.64 KB
+[2025-07-25T01:34:12.876Z]   - polyfills-42372ed130431b0a.js: 109.96 KB
+[2025-07-25T01:34:12.876Z]   - pages\index-324568d471d4f35f.js: 20.81 KB
+[2025-07-25T01:34:12.876Z] Total JavaScript bundle size: 0.39 MB
+[2025-07-25T01:34:12.877Z] Validating deployment readiness...
+[2025-07-25T01:34:12.877Z] Build output validation completed
+[2025-07-25T01:34:12.878Z] [1m[32mPhase COMPLETED: Post-Build Validation (9ms)[0m
+[2025-07-25T01:34:12.879Z] Build report generated: C:\Kiro Repo\gamecompare Kiro\gamecompare.ai\build-report.json
+[2025-07-25T01:34:12.879Z] [1mBuild Summary:[0m
+[2025-07-25T01:34:12.880Z] Variant: development
+[2025-07-25T01:34:12.880Z] Total Duration: 57.9s
+[2025-07-25T01:34:12.881Z] Phases: 3 successful, 0 failed
+[2025-07-25T01:34:12.881Z] [1m[32m✓ Build completed successfully![0m
