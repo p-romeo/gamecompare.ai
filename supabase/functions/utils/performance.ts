@@ -22,7 +22,7 @@ class ConnectionPool {
    */
   getConnection(url: string, key: string): SupabaseClient {
     const poolKey = `${url}:${key}`
-    
+
     if (!this.pools.has(poolKey)) {
       this.pools.set(poolKey, [])
       this.activeConnections.set(poolKey, 0)
@@ -46,7 +46,7 @@ class ConnectionPool {
           persistSession: false
         }
       })
-      
+
       this.activeConnections.set(poolKey, activeCount + 1)
       return client
     }
@@ -75,14 +75,14 @@ class ConnectionPool {
    */
   getStats(): Record<string, { active: number; pooled: number }> {
     const stats: Record<string, { active: number; pooled: number }> = {}
-    
+
     for (const [key, pool] of this.pools.entries()) {
       stats[key] = {
         active: this.activeConnections.get(key) || 0,
         pooled: pool.length
       }
     }
-    
+
     return stats
   }
 }
@@ -286,18 +286,18 @@ export class ResponseOptimizer {
     const jsonString = JSON.stringify(data)
     const encoder = new TextEncoder()
     const input = encoder.encode(jsonString)
-    
+
     // Use built-in compression
     const compressionStream = new CompressionStream('gzip')
     const writer = compressionStream.writable.getWriter()
     const reader = compressionStream.readable.getReader()
-    
+
     writer.write(input)
     writer.close()
-    
+
     const chunks: Uint8Array[] = []
     let done = false
-    
+
     while (!done) {
       const { value, done: readerDone } = await reader.read()
       done = readerDone
@@ -305,17 +305,17 @@ export class ResponseOptimizer {
         chunks.push(value)
       }
     }
-    
+
     // Combine chunks
     const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)
     const result = new Uint8Array(totalLength)
     let offset = 0
-    
+
     for (const chunk of chunks) {
       result.set(chunk, offset)
       offset += chunk.length
     }
-    
+
     return result
   }
 
@@ -355,11 +355,11 @@ export class ResponseOptimizer {
     const jsonString = JSON.stringify(data)
     const encoder = new TextEncoder()
     const dataBuffer = encoder.encode(jsonString)
-    
+
     const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-    
+
     return `"${hashHex.slice(0, 16)}"`
   }
 
@@ -373,10 +373,10 @@ export class ResponseOptimizer {
     const stream = new ReadableStream({
       async start(controller) {
         const encoder = new TextEncoder()
-        
+
         try {
           controller.enqueue(encoder.encode('['))
-          
+
           let first = true
           for await (const item of dataGenerator) {
             if (!first) {
@@ -385,7 +385,7 @@ export class ResponseOptimizer {
             controller.enqueue(encoder.encode(JSON.stringify(item)))
             first = false
           }
-          
+
           controller.enqueue(encoder.encode(']'))
           controller.close()
         } catch (error) {
@@ -457,13 +457,13 @@ export const IndexOptimizations = {
       -- Use array operators for platform/genre filtering
       -- Consider using CTEs for complex filters
     `,
-    
+
     vectorSearch: `
       -- Combine vector similarity with SQL filters for better performance
       -- Use appropriate similarity thresholds to limit results
       -- Consider pre-filtering before vector search for better performance
     `,
-    
+
     aggregations: `
       -- Use materialized views for expensive aggregations
       -- Consider using window functions for ranking queries
@@ -485,10 +485,10 @@ export class PerformanceMonitor {
     if (!this.metrics.has(queryName)) {
       this.metrics.set(queryName, [])
     }
-    
+
     const times = this.metrics.get(queryName)!
     times.push(timeMs)
-    
+
     // Keep only last 100 measurements
     if (times.length > 100) {
       times.shift()
@@ -525,11 +525,11 @@ export class PerformanceMonitor {
    */
   getAllStats(): Record<string, any> {
     const stats: Record<string, any> = {}
-    
+
     for (const queryName of this.metrics.keys()) {
       stats[queryName] = this.getStats(queryName)
     }
-    
+
     return stats
   }
 

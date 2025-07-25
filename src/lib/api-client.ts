@@ -221,6 +221,7 @@ export class APIClient {
 
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
+      let buffer = ''
 
       try {
         while (true) {
@@ -230,8 +231,30 @@ export class APIClient {
             break
           }
           
-          const chunk = decoder.decode(value, { stream: true })
-          onChunk(chunk)
+          buffer += decoder.decode(value, { stream: true })
+          
+          // Process complete lines
+          const lines = buffer.split('\n')
+          buffer = lines.pop() || '' // Keep incomplete line in buffer
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6))
+                
+                if (data.type === 'chunk') {
+                  onChunk(data.content)
+                } else if (data.type === 'error') {
+                  throw new Error(data.content)
+                } else if (data.type === 'done') {
+                  return
+                }
+                // Ignore other types like 'games' for now
+              } catch (parseError) {
+                console.warn('Failed to parse streaming data:', line, parseError)
+              }
+            }
+          }
         }
       } finally {
         reader.releaseLock()

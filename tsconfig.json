@@ -18,8 +18,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["jest", "@testing-library/jest-dom", "node"]
+    "types": ["node"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "supabase/functions", "cypress", "**/*.cy.ts"]
+  "exclude": ["node_modules", "supabase/functions", "cypress", "**/*.cy.ts", "cypress.config.ts"]
 }

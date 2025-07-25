@@ -5,10 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:vercel": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch --passWithNoTests",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:deploy": "supabase functions deploy"
@@ -18,29 +17,22 @@
     "npm": ">=9.0.0"
   },
   "dependencies": {
-    "@pinecone-database/pinecone": "^1.1.2",
     "@supabase/supabase-js": "^2.39.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
     "next": "^14.2.30",
     "openai": "^4.24.1",
+    "postcss": "^8.4.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3"
   },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@types/jest": "^30.0.0",
-    "autoprefixer": "^10.4.16",
-    "jest": "^30.0.4",
-    "jest-environment-jsdom": "^30.0.4",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0"
-  }
+  "devDependencies": {}
 }

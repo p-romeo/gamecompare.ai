@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ChatMessage, FilterState } from '@/lib/types'
+import { ChatMessage, FilterState, GameSummary } from '@/lib/types'
 import { apiClient } from '@/lib/api-client'
 import { FilterPanel } from './FilterPanel'
+import { GameCard } from './GameCard'
 
 interface ChatInterfaceProps {
   initialFilters?: FilterState
@@ -14,6 +15,7 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
   const [error, setError] = useState<string | null>(null)
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [filters, setFilters] = useState<FilterState>(initialFilters)
+  const [currentGames, setCurrentGames] = useState<GameSummary[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Load conversation history and filters from localStorage on mount
@@ -65,10 +67,15 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    if (messagesEndRef.current && typeof messagesEndRef.current.scrollIntoView === 'function') {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    const scrollToBottom = () => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+      }
     }
-  }, [messages])
+    
+    // Use requestAnimationFrame to ensure DOM has updated
+    requestAnimationFrame(scrollToBottom)
+  }, [messages, isLoading])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -96,28 +103,35 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
     setMessages(prev => [...prev, assistantMessage])
 
     try {
-      // Use streaming API for real-time response
+      // Try streaming API first
       let fullResponse = ''
+      let streamWorked = false
       
-      await apiClient.streamChatResponse(
-        userMessage.content,
-        filters,
-        (chunk: string) => {
-          fullResponse += chunk
-          setMessages(prev => 
-            prev.map(msg => 
-              msg.id === assistantMessageId 
-                ? { ...msg, content: fullResponse }
-                : msg
+      try {
+        await apiClient.streamChatResponse(
+          userMessage.content,
+          filters,
+          (chunk: string) => {
+            fullResponse += chunk
+            streamWorked = true
+            setMessages(prev => 
+              prev.map(msg => 
+                msg.id === assistantMessageId 
+                  ? { ...msg, content: fullResponse }
+                  : msg
+              )
             )
-          )
-        }
-      )
+          }
+        )
+      } catch (streamError) {
+        console.warn('Streaming failed, falling back to regular API:', streamError)
+      }
 
-      // If streaming isn't available, fall back to regular API
-      if (!fullResponse) {
+      // If streaming didn't work, fall back to regular API
+      if (!streamWorked) {
         const response = await apiClient.searchSimilarGames(userMessage.content, filters)
         setConversationId(response.conversation_id)
+        setCurrentGames(response.games || [])
         
         setMessages(prev => 
           prev.map(msg => 
@@ -143,13 +157,14 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
   const clearConversation = () => {
     setMessages([])
     setConversationId(null)
+    setCurrentGames([])
     setError(null)
     localStorage.removeItem('chat-messages')
     localStorage.removeItem('conversation-id')
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 h-[600px]" data-cy="chat-interface">
+    <div className="flex flex-col lg:flex-row gap-4 min-h-[600px] max-h-[80vh]" data-cy="chat-interface">
       {/* Filter Panel - Desktop: sidebar, Mobile: collapsible */}
       <div className="lg:w-80 flex-shrink-0">
         <FilterPanel
@@ -160,7 +175,7 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
       </div>
 
       {/* Chat Interface */}
-      <div className="flex-1 flex flex-col bg-gray-800 rounded-lg shadow-xl">
+      <div className="flex-1 flex flex-col bg-gray-800 rounded-lg shadow-xl overflow-hidden">
         {/* Header with clear button */}
         {messages.length > 0 && (
           <div className="flex justify-between items-center p-4 border-b border-gray-700">
@@ -176,7 +191,7 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
         )}
 
         {/* Messages area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4" data-cy="chat-messages">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0" data-cy="chat-messages">
           {messages.length === 0 ? (
             <p className="text-gray-400 text-center">
               Ask me about games! I can help you find similar games, compare titles, or discover something new.
@@ -209,6 +224,18 @@ export function ChatInterface({ initialFilters = {} }: ChatInterfaceProps) {
           )}
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Game Results */}
+        {currentGames.length > 0 && (
+          <div className="p-4 border-t border-gray-700">
+            <h4 className="text-white font-medium mb-3">Recommended Games</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {currentGames.map((game) => (
+                <GameCard key={game.id} game={game} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Error display */}
         {error && (
